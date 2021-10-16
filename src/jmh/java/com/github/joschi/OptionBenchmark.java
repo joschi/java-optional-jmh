@@ -89,6 +89,17 @@ public class OptionBenchmark {
         return sum;
     }
 
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MICROSECONDS)
+    public long sumOptionalNoConditional() {
+        long sum = 0;
+        for (long i = 0; i < 1_000_000; ++i) {
+            sum += getOptionalNumber(i).orElse(0L);
+        }
+        return sum;
+    }
+
     // Variant 4.
     // Replace MAGIC_NUMBER with OptionalLong.empty().
     // Now we not only need to box the value into a Long, but also create the OptionalLong wrapper.
@@ -111,6 +122,17 @@ public class OptionBenchmark {
         return sum;
     }
 
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MICROSECONDS)
+    public long sumOptionalLongNoConditional() {
+        long sum = 0;
+        for (long i = 0; i < 1_000_000; ++i) {
+            sum += getOptionalLong(i).orElse(0L);
+        }
+        return sum;
+    }
+
     // Variant 5.
     // Replace MAGIC_NUMBER with Option.none().
     // Now we not only need to box the value into a Long, but also create the Option<T> wrapper.
@@ -129,6 +151,17 @@ public class OptionBenchmark {
             if (n.isDefined()) {
                 sum += n.get();
             }
+        }
+        return sum;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MICROSECONDS)
+    public long sumOptionNumberNoConditional() {
+        long sum = 0;
+        for (long i = 0; i < 1_000_000; ++i) {
+            sum += getOptionNumber(i).getOrElse(0L);
         }
         return sum;
     }
