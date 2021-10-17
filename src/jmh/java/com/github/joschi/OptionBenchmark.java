@@ -165,4 +165,60 @@ public class OptionBenchmark {
         }
         return sum;
     }
+
+
+    // Variant 6.
+    // Replace MAGIC_NUMBER with CustomOptionalLong.EMTPY.
+    // Now we not only need to box the value into a Long, but also create the CustomOptionalLong wrapper.
+    private CustomOptionalLong getCustomOptionalLong(long i) {
+        long n = i & 0xFF;
+        return n == MAGIC_NUMBER ? CustomOptionalLong.EMPTY : new CustomOptionalLong(n);
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MICROSECONDS)
+    public long sumCustomOptionalLong() {
+        long sum = 0;
+        for (long i = 0; i < 1_000_000; ++i) {
+            CustomOptionalLong n = getCustomOptionalLong(i);
+            if (n.isPresent()) {
+                sum += n.get();
+            }
+        }
+        return sum;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MICROSECONDS)
+    public long sumCustomOptionalLongNoConditional() {
+        long sum = 0;
+        for (long i = 0; i < 1_000_000; ++i) {
+            sum += getCustomOptionalLong(i).getOrElse(0L);
+        }
+        return sum;
+    }
+
+    static final class CustomOptionalLong {
+        static final CustomOptionalLong EMPTY = new CustomOptionalLong(Long.MIN_VALUE);
+
+        private final long value;
+
+        public CustomOptionalLong(long value) {
+            this.value = value;
+        }
+
+        public boolean isPresent() {
+            return this == EMPTY;
+        }
+
+        public long get() {
+            return value;
+        }
+
+        public long getOrElse(long def) {
+            return isPresent() ? value : def;
+        }
+    }
 }

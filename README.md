@@ -9,3 +9,4 @@ The project runs the following benchmarks:
 3. We return boxed Longs wrapped in `Optional` and we return `Optional.empty()` whenever we need to skip a number (with and without conditional testing for presence).
 4. We return boxed Longs wrapped in `OptionalLong` and we return `OptionalLong.empty()` whenever we need to skip a number (with and without conditional testing for presence).
 5. We return boxed Longs wrapped in [vavr](https://www.vavr.io/)'s `Option<T>` and we return `Option.none()` whenever we need to skip a number (with and without conditional testing for presence).
+6. We return boxed Longs wrapped in a custom optional-like class and we return `CustomOptionalLong.EMPTY` whenever we need to skip a number (with and without conditional testing for presence).
